@@ -71,7 +71,7 @@ runs:
         wget -q https://downloads.tuxfamily.org/godotengine/${{ inputs.godot-version }}/Godot_v${{ inputs.godot-version }}-stable_export_templates.tpz
         unzip Godot_v${{ inputs.godot-version }}-stable_$OS_SUFFIX.zip
         unzip Godot_v${{ inputs.godot-version }}-stable_export_templates.tpz
-        mkdir $TEMPLATE_DIR
+        mkdir -p $TEMPLATE_DIR
         mv templates/* $TEMPLATE_DIR
         rm -f Godot_v${{ inputs.godot-version }}-stable_$OS_SUFFIX.zip Godot_v${{ inputs.godot-version }}-stable_export_templates.tpz
         ./Godot_v${{ inputs.godot-version }}-stable_$OS_SUFFIX --headless --editor --quit
