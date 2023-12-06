@@ -48,6 +48,16 @@ runs:
         [[ "Linux" = ${{ inputs.os }}* ]] && echo "TEMPLATE_DIR=~/.local/share/godot/export_templates/${{ inputs.godot-version }}.stable" >> $GITHUB_ENV
         [[ "Windows" = ${{ inputs.os }}* ]] && echo "TEMPLATE_DIR=AppData/Roaming/Godot/export_templates/${{ inputs.godot-version }}.stable" >> $GITHUB_ENV
 
+
+    - name: Create export presets config
+      if: ${{ inputs.create-export-preset-cfg  == 'true' }}
+      shell: bash
+      run: cp ${{ github.action_path }}\export_presets.cfg ${{ inputs.working-directory }}/export_presets.cfg
+
+    - name: Create export paths directory structure
+      shell: bash
+      run: mkdir -p "$(dirname ${{ inputs.output-file-path }})"
+      
     # - name: Cache Godot files
     #   id: cache-godot
     #   uses: actions/cache@v3
@@ -75,14 +85,7 @@ runs:
         mv templates/* ${{ env.TEMPLATE_DIR }}
         rm -f Godot_v${{ inputs.godot-version }}-stable_${{ env.OS_SUFFIX }}.zip Godot_v${{ inputs.godot-version }}-stable_export_templates.tpz
 
-    - name: Create export presets config
-      if: ${{ inputs.create-export-preset-cfg  == 'true' }}
-      shell: bash
-      run: cp ${{ github.action_path }}\export_presets.cfg ${{ inputs.working-directory }}/export_presets.cfg
 
-    - name: Create export paths directory structure
-      shell: bash
-      run: mkdir -p "$(dirname ${{ inputs.output-file-path }})"
 
     - name: Export Godot project to html
       shell: bash
