@@ -46,7 +46,7 @@ runs:
       shell: bash
       run: |
         [[ "Linux" = ${{ inputs.os }}* ]] && echo "TEMPLATE_DIR=~/.local/share/godot/export_templates/${{ inputs.godot-version }}.stable" >> $GITHUB_ENV
-        [[ "Windows" = ${{ inputs.os }}* ]] && echo "TEMPLATE_DIR=${{ runner.temp }}/AppData/Roaming/Godot/export_templates/4.2.stable/${{ inputs.godot-version }}.stable" >> $GITHUB_ENV
+        [[ "Windows" = ${{ inputs.os }}* ]] && echo "TEMPLATE_DIR=AppData/Roaming/Godot/export_templates/4.2.stable/${{ inputs.godot-version }}.stable" >> $GITHUB_ENV
 
     # - name: Cache Godot files
     #   id: cache-godot
