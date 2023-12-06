@@ -23,40 +23,51 @@ inputs:
     description: 'Godot Engine version. Supported are 4.x versions'
     required: false
     default: '4.2'
+  os:
+    description: 'The runners OS. Linux and Windows supported'
+    required: false
+    default: 'Linux'
   
 runs:
   using: "composite"
   steps:
-    - name: Check is running on Linux
-      if: runner.os != 'Linux'
-      shell: bash
-      run: exit 1
+    # - name: Check is running on Linux
+    #   if: runner.os != 'Linux'
+    #   shell: bash
+    #   run: exit 1
 
-    - name: Cache Godot files
-      id: cache-godot
-      uses: actions/cache@v3
-      with:
-        path: |
-          ~/.local/share/godot/**
-          /usr/local/bin/godot
-          ~/.config/godot/**
-        key: ${{ runner.os }}-godot-${{ inputs.godot-version }}
+    - name: Define OS_SUFFIX
+      run: |
+        [[ "Linux" = ${{ inputs.os }}* ]] && echo "OS_SUFFIX=linux_headless.64" >> $GITHUB_ENV
+        [[ "Windows" = ${{ inputs.os }}* ]] && echo "OS_SUFFIX=win64.exe" >> $GITHUB_ENV
+
+    - name: Define TEMPLATE_DIR
+      run: |
+        [[ "Linux" = ${{ inputs.os }}* ]] && echo "TEMPLATE_DIR=~/.local/share/godot/export_templates/${{ inputs.godot-version }}.stable" >> $GITHUB_ENV
+        [[ "Windows" = ${{ inputs.os }}* ]] && echo "TEMPLATE_DIR=${{ runner.temp }}/AppData/Roaming/Godot/export_templates/4.2.stable/${{ inputs.godot-version }}.stable" >> $GITHUB_ENV
+
+    # - name: Cache Godot files
+    #   id: cache-godot
+    #   uses: actions/cache@v3
+    #   with:
+    #     path: |
+    #       ~/.local/share/godot/**
+    #       /usr/local/bin/godot
+    #       ~/.config/godot/**
+    #     key: ${{ runner.os }}-godot-${{ inputs.godot-version }}
 
     - name: Download and config Godot Engine linux server and templates
       shell: bash
       if: steps.cache-godot.outputs.cache-hit != 'true'
       run: |
-        wget -q https://downloads.tuxfamily.org/godotengine/${{ inputs.godot-version }}/Godot_v${{ inputs.godot-version }}-stable_linux.x86_64.zip
+        wget -q https://downloads.tuxfamily.org/godotengine/${{ inputs.godot-version }}/Godot_v${{ inputs.godot-version }}-stable_$OS_SUFFIX.zip
         wget -q https://downloads.tuxfamily.org/godotengine/${{ inputs.godot-version }}/Godot_v${{ inputs.godot-version }}-stable_export_templates.tpz
-        mkdir ~/.cache
-        mkdir -p ~/.config/godot
-        mkdir -p ~/.local/share/godot/export_templates/${{ inputs.godot-version }}.stable
-        unzip Godot_v${{ inputs.godot-version }}-stable_linux.x86_64.zip
-        mv Godot_v${{ inputs.godot-version }}-stable_linux.x86_64 /usr/local/bin/godot
+        unzip Godot_v${{ inputs.godot-version }}-stable_$OS_SUFFIX.zip
         unzip Godot_v${{ inputs.godot-version }}-stable_export_templates.tpz
-        mv templates/* ~/.local/share/godot/export_templates/${{ inputs.godot-version }}.stable
-        rm -f Godot_v${{ inputs.godot-version }}-stable_linux.x86_64.zip Godot_v${{ inputs.godot-version }}-stable_export_templates.tpz
-        godot --headless --editor --quit
+        mkdir $TEMPLATE_DIR
+        mv templates/* $TEMPLATE_DIR
+        rm -f Godot_v${{ inputs.godot-version }}-stable_$OS_SUFFIX.zip Godot_v${{ inputs.godot-version }}-stable_export_templates.tpz
+        ./Godot_v${{ inputs.godot-version }}-stable_$OS_SUFFIX --headless --editor --quit
 
     - name: Create export presets config
       if: ${{ inputs.create-export-preset-cfg  == 'true' }}
@@ -69,4 +80,4 @@ runs:
 
     - name: Export Godot project to html
       shell: bash
-      run: godot --headless --path ${{ inputs.working-directory }} --export-release Web ${{ inputs.output-file-path }}
+      run: ./Godot_v${{ inputs.godot-version }}-stable_$OS_SUFFIX --headless --path ${{ inputs.working-directory }} --export-release Web ${{ inputs.output-file-path }}
