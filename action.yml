@@ -58,6 +58,11 @@ runs:
     #       ~/.config/godot/**
     #     key: ${{ runner.os }}-godot-${{ inputs.godot-version }}
 
+    - name: Install wget on Windows
+      shell: bash
+      if: runner.os == 'Windows'
+      run: choco install wget --no-progress 
+
     - name: Download and config Godot Engine linux server and templates
       shell: bash
       if: steps.cache-godot.outputs.cache-hit != 'true'
