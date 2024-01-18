@@ -39,14 +39,14 @@ runs:
     - name: Define OS_SUFFIX
       shell: bash
       run: |
-        [[ "Linux" = ${{ inputs.os }}* ]] && echo "OS_SUFFIX=linux_headless.64" >> $GITHUB_ENV
-        [[ "Windows" = ${{ inputs.os }}* ]] && echo "OS_SUFFIX=win64.exe" >> $GITHUB_ENV
+        [[ "Linux" = ${{ inputs.os }} ]] && echo "OS_SUFFIX=linux_headless.64" >> $GITHUB_ENV
+        [[ "Windows" = ${{ inputs.os }} ]] && echo "OS_SUFFIX=win64.exe" >> $GITHUB_ENV
 
     - name: Define TEMPLATE_DIR
       shell: bash
       run: |
-        [[ "Linux" = ${{ inputs.os }}* ]] && echo "TEMPLATE_DIR=~/.local/share/godot/export_templates/${{ inputs.godot-version }}.stable" >> $GITHUB_ENV
-        [[ "Windows" = ${{ inputs.os }}* ]] && echo "TEMPLATE_DIR=C:/Users/runneradmin/AppData/Roaming/Godot/export_templates/${{ inputs.godot-version }}.stable" >> $GITHUB_ENV
+        [[ "Linux" = ${{ inputs.os }} ]] && echo "TEMPLATE_DIR=~/.local/share/godot/export_templates/${{ inputs.godot-version }}.stable" >> $GITHUB_ENV
+        [[ "Windows" = ${{ inputs.os }} ]] && echo "TEMPLATE_DIR=C:/Users/runneradmin/AppData/Roaming/Godot/export_templates/${{ inputs.godot-version }}.stable" >> $GITHUB_ENV
 
     - name: Create export presets config
       if: ${{ inputs.create-export-preset-cfg  == 'true' }}
