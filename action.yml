@@ -22,7 +22,7 @@ inputs:
   godot-version:
     description: 'Godot Engine version. Supported are 4.x versions'
     required: false
-    default: '4.2.2'
+    default: '4.2.2-stable'
   os:
     description: 'The runners OS. Linux and Windows supported'
     required: false
@@ -50,10 +50,8 @@ runs:
       shell: bash
       if: steps.cache-godot.outputs.cache-hit != 'true'
       run: |
-        # wget -q https://github.com/godotengine/godot/releases/download/${{ inputs.godot-version }}-stable/Godot_v${{ inputs.godot-version }}-stable_${{ env.OS_SUFFIX }}.zip
-        # wget -q https://github.com/godotengine/godot/releases/download/${{ inputs.godot-version }}-stable/Godot_v${{ inputs.godot-version }}-stable_export_templates.tpz
         wget -q https://github.com/godotengine/godot-builds/releases/download/${{ inputs.godot-version }}/Godot_v${{ inputs.godot-version }}_linux.x86_64.zip
-        wget -q https://github.com/godotengine/godot-builds/releases/download/${{ inputs.godot-version }}/Godot_v${{ inputs.godot-version }}-stable_export_templates.tpz
+        wget -q https://github.com/godotengine/godot-builds/releases/download/${{ inputs.godot-version }}/Godot_v${{ inputs.godot-version }}_export_templates.tpz
         unzip Godot_v${{ inputs.godot-version }}-stable_linux.x86_64.zip
         unzip Godot_v${{ inputs.godot-version }}-stable_export_templates.tpz
         mkdir -p ~/.local/share/godot/export_templates/${{ inputs.godot-version }}.stable
