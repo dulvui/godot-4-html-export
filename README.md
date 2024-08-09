@@ -18,7 +18,8 @@ If you are facing problems with the action or this README feels not complete, pu
 | working-directory | false | . | Path to project.godot file |
 | working-directory | false | html5/index.html | Path of the exported html files |
 | godot-create-export-preset-cfg | false | true | Set true if the default export_presets.cfg should be created |
-| godot-version | false | 4.x-stable | Check versions [here](https://downloads.tuxfamily.org/godotengine/) |
+| godot-version | false | 4.x | Check versions [here](https://github.com/godotengine/godot-builds/releases) |
+| godot-channel | false | stable | Check channels [here](https://github.com/godotengine/godot-builds/releases) |
 
 
 <!-- ## Working examples
