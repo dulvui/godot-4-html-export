@@ -61,6 +61,11 @@ runs:
         rm -f Godot_v${{ inputs.godot-version }}_linux.x86_64.zip Godot_v${{ inputs.godot-version }}_export_templates.tpz
         mv ./Godot_v${{ inputs.godot-version }}_linux.x86_64 /usr/local/bin/godot
 
+    - name: Create export presets config
+      if: ${{ inputs.create-export-preset-cfg  == 'true' }}
+      shell: bash
+      run: cp ${{ github.action_path }}/export_presets.cfg ${{ inputs.working-directory }}/export_presets.cfg
+
     - name: Open project once to import assets in editor mode
       shell: bash
       continue-on-error: true # timeout will exit with code 124
