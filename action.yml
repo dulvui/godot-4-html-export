@@ -22,7 +22,7 @@ inputs:
   godot-version:
     description: 'Godot Engine version. Supported are 4.x versions'
     required: false
-    default: '4.2'
+    default: '4.2.2'
   os:
     description: 'The runners OS. Linux and Windows supported'
     required: false
@@ -31,11 +31,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    # - name: Check is running on Linux
-    #   if: runner.os != 'Linux'
-    #   shell: bash
-    #   run: exit 1
-
     - name: Define OS_SUFFIX
       shell: bash
       run: |
@@ -57,15 +52,15 @@ runs:
       shell: bash
       run: mkdir -p "$(dirname ${{ inputs.output-file-path }})"
 
-    # - name: Cache Godot files
-    #   id: cache-godot
-    #   uses: actions/cache@v3
-    #   with:
-    #     path: |
-    #       ~/.local/share/godot/**
-    #       /usr/local/bin/godot
-    #       ~/.config/godot/**
-    #     key: ${{ runner.os }}-godot-${{ inputs.godot-version }}
+    - name: Cache Godot files
+      id: cache-godot
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.local/share/godot/**
+          /usr/local/bin/godot
+          ~/.config/godot/**
+        key: ${{ runner.os }}-godot-${{ inputs.godot-version }}
 
     - name: Install wget on Windows
       shell: bash
@@ -76,15 +71,13 @@ runs:
       shell: bash
       if: steps.cache-godot.outputs.cache-hit != 'true'
       run: |
-        wget -q https://downloads.tuxfamily.org/godotengine/${{ inputs.godot-version }}/Godot_v${{ inputs.godot-version }}-stable_${{ env.OS_SUFFIX }}.zip
-        wget -q https://downloads.tuxfamily.org/godotengine/${{ inputs.godot-version }}/Godot_v${{ inputs.godot-version }}-stable_export_templates.tpz
+        wget -q https://github.com/godotengine/godot/releases/download/${{ inputs.godot-version }}-stable/Godot_v${{ inputs.godot-version }}-stable_${{ env.OS_SUFFIX }}.zip
+        wget -q https://github.com/godotengine/godot/releases/download/${{ inputs.godot-version }}-stable/Godot_v${{ inputs.godot-version }}-stable_export_templates.tpz
         unzip Godot_v${{ inputs.godot-version }}-stable_${{ env.OS_SUFFIX }}.zip
         unzip Godot_v${{ inputs.godot-version }}-stable_export_templates.tpz
         mkdir -p ${{ env.TEMPLATE_DIR }}
         mv templates/* ${{ env.TEMPLATE_DIR }}
         rm -f Godot_v${{ inputs.godot-version }}-stable_${{ env.OS_SUFFIX }}.zip Godot_v${{ inputs.godot-version }}-stable_export_templates.tpz
-
-
 
     - name: Export Godot project to html
       shell: bash
