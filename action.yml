@@ -11,14 +11,6 @@ inputs:
     description: 'The working directory'
     required: false
     default: '.'
-  output-file-path:
-    description: 'Path of the exported html files'
-    required: false
-    default: 'html5/index.html'
-  create-export-preset-cfg:
-    description: 'Set true if a simple export_presets.cfg should be created'
-    required: false
-    default: true
   godot-version:
     description: 'Godot Engine version. Supported are 4.x versions'
     required: false
@@ -27,10 +19,6 @@ inputs:
     description: 'Godot Engine release channel (stable, beta, rc1, rc2, rc3...). Defaults to stable'
     required: false
     default: 'stable'
-  os:
-    description: 'The runners OS. Linux and Windows supported'
-    required: false
-    default: 'Linux'
   
 runs:
   using: "composite"
@@ -65,11 +53,6 @@ runs:
         rm -f Godot_v${{ inputs.godot-version }}-${{ inputs.godot-channel }}_linux.x86_64.zip Godot_v${{ inputs.godot-version }}-${{ inputs.godot-channel }}_export_templates.tpz
         mv ./Godot_v${{ inputs.godot-version }}-${{ inputs.godot-channel }}_linux.x86_64 /usr/local/bin/godot
 
-    - name: Create export presets config
-      if: ${{ inputs.create-export-preset-cfg  == 'true' }}
-      shell: bash
-      run: cp ${{ github.action_path }}/export_presets.cfg ${{ inputs.working-directory }}/export_presets.cfg
-
     - name: Open project once to import assets in editor mode
       shell: bash
       continue-on-error: true # timeout will exit with code 124
@@ -77,4 +60,4 @@ runs:
 
     - name: Export Godot project to html
       shell: bash
-      run: godot --headless --path ${{ inputs.working-directory }} --export-release Web ${{ inputs.output-file-path }}
+      run: godot --headless --path ${{ inputs.working-directory }} --export-release Web 
