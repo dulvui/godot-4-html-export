@@ -20,9 +20,9 @@ If you are facing problems with the action or this README feels not complete, pu
 | godot-channel | false | stable | Check channels [here](https://github.com/godotengine/godot-builds/releases) |
 
 
-<!-- ## Working examples
+ ## Working examples
 You an find a working examples here:  
-https://github.com/dulvui/ball2box/blob/main/.github/workflows/upload-itchio.yml -->
+https://github.com/dulvui/condor/blob/main/.github/workflows/upload-itchio.yml  
 
 ## License
 This software is licensed under the [MIT license](LICENSE).
