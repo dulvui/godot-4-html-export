@@ -13,8 +13,7 @@ inputs:
     default: '.'
   godot-version:
     description: 'Godot Engine version. Supported are 4.x versions'
-    required: false
-    default: '4.2.2'
+    required: true
   godot-channel:
     description: 'Godot Engine release channel (stable, beta, rc1, rc2, rc3...). Defaults to stable'
     required: false
