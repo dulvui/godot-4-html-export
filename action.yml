@@ -35,7 +35,7 @@ runs:
           ~/.local/share/godot/**
           /usr/local/bin/godot
           ~/.config/godot/**
-        key: ${{ runner.os }}-godot-${{ inputs.godot-version }}
+        key: ${{ runner.os }}-godot-${{ inputs.godot-version }}-${{ inputs.godot-channel }}
 
     - name: Download and config Godot Engine linux server and templates
       shell: bash
